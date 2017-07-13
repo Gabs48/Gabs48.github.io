@@ -6755,3 +6755,10 @@ button.close {
   }
 }
 /*# sourceMappingURL=bootstrap.css.map */
+
+/* Add custom classes */
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
