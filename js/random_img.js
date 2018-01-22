@@ -1,4 +1,4 @@
-var urlstr = "https://irobotique.be:9088/"
+var urlstr = "http://irobotique.be:9087/"
 
 $.ajax({
             url: urlstr,
