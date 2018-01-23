@@ -6,7 +6,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Sonixcycle, a tool for sound designers">
+	<meta name="description" content="Tigrillo, a bio-inspired quadruped">
 	<meta name="author" content="Gabriel Urbain">
 
 	<title>Gabriel's Blog</title>
@@ -67,14 +67,14 @@
 
 	<!-- Page Header -->
 	<!-- Set your background image for this header on the line below. -->
-	<header class="intro-header" style="background-image: url('img/sonixcycle-bg.png')">
+	<header class="intro-header" style="background-image: url('img/tigrillo-bg.png')">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-9 col-lg-offset-2 col-md-10 col-md-offset-1">
 					<div class="site-heading">
-						<h1>SonixCycle</h1>
+						<h1>A Microchip on Four Legs</h1>
 						<hr class="small">
-						<span class="subheading">A tool to browse large collections of Foley sounds using perceptual and semantic content</i></span>
+						<span class="subheading">Details on the design, the electronics and the software architecture of the Tigrillo robot.</i></span>
 					</div>
 				</div>
 			</div>
@@ -87,37 +87,48 @@
 			<div class="row">
 				<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
-					<h2 class="section-heading">A classical sound designer workflow</h2>
-					
-					<p>You are a sound designer. Your every day work consists in adding Foley sounds to movies in post-production. You start your day in the morning by watching the video sequences you will focus on later today and you elaborate a clear idea in your head about the sounds you want to emphasize: the clapping noise of a man walking in the street, the urban uproar with its cars and klaxons, the friction of a woman searching her handbag,... On your hard drive are recorded terabytes of sounds with any kind of properties coming from libraries from studios all around the world. But your  are looking for something too precise, too specific in term of rhythmic or timbral properties to start browsing with keywords those huge collections of which you don't know the classification. So, like every day, you spend your afternoon in the studio recording ninety percent of the Foley sounds you will use in this new movie.</p>
-					
-					<p>Of course, there is no perfect solution to search and browse sounds collections. In certain circumstances, semantic data can be the main property someone is interested in. Sometimes, he has specific requirements for noise, tempo, timbre, loudness, amplitude evolution. In this R&D work, we wanted to provide a tool that could index all those properties and manage queries combining several different fields together. A major constraint was to be easily scalable to collections of many terabytes and work efficiently in a REST server-client architecture.</p>
-					
+					<p>In this post, we describe the components and the architecture of the <a href="../spinngrillo.html">Tigrillo robot</a>, a compliant quadruped platform controlled with a Raspberry Pi to achieve early research on CPGs and transfer learning. In order to situate the technical description that follows in a scientific context, it may be useful to explain the research methodology that is used:</p>
+
+					<ul>
+						<li>Optimisation of a parametric Central Pattern Generator (CPG) controller using the <a href="http://www.neurorobotics.net/">HBP Neurorobotics platform (NRP)</a> and tools</li>
+						<li>Transfer and validation on the Tigrillo quadruped platform</li>
+						<li>Collection and analysis of sensors feedback on the robot and in the NRP to design and improve a robust closed-loop system</li>
+						<li>Implementation of the CPGs using <a href="http://www.nest-simulator.org/">NEST</a> on the NRP</li>
+						<li>Transfer and validation on our quadruped robot embedding <a href="http://apt.cs.manchester.ac.uk/projects/SpiNNaker/">SpiNNaker hardware</a></li>
+						<li>Comparaison between simulations and the real platforms and extraction of knowledge to iterate on step 1</li>
+					</ul>
+
+					<p>The Tigrillo robot enables step 2 by providing a robot to validate the accuracy an general behavior in the NRP simulations.</p>
+
+					<h2 class="section-heading">Mechanical details</h2>
+
+					<p>The design process of Tigrillo platform have been guided considering three main features for the robot: compliance, cheapness, versatility. The compliance is a key element in this research as it is believed to add efficiency and robustness to locomotion, like what we can see in biology. However, it also challenges classical control techniques as the dynamics of the robot is now governed by equations with a higher complexity level. On the current platform, the compliance is mainly ensure by using springs in the legs knee instead of actuating them.</p>
+
+					<div style="position:relative;height:0;padding-bottom:56.25%">
+						<iframe src="https://www.youtube.com/embed/JHBoADWQkYI?ecver=2" style="position:absolute;width:100%;height:100%;left:0" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+					</div>
+					<span class="caption text-muted">A short view of the mechanical porperties of the robot legs.</span>
+
 					</br>
 					
-					<h2 class="section-heading">Sonixcycle, a tool based on Solr search engine and indexing perceptual sound properties</h2>
-					
-					<p>To answer the constraints in scalability, deployment and speed, we started from an open source semantic search engine called <a href="http://lucene.apache.org/solr/">Apache Solr</a>. The idea was to find a way to adapt the tool to index perceptual audio properties but the main challenge was to take the time dimension into consideration without averaging over a full audio track. To do that, we started by segmenting the sound every 10ms where the audio properties could be assumed static. A series of features like MFCC or more high-level properties are then extracted and condensed into vectors. From there two options were imagined: for some features independent from the time evolution, statistics were computed and directly indexed in Solr; for the rest, the vectors were assembled in shingles of a few thousands of segments to keep a trace of the features' evolution on a short time level and those shingles were classified with an unsupervised hierarchical k-means clustering method running on the server GPU.</p>
-					
-					</br>
-					
-					<a href="img/sonixcycle1.png">
-						<img class="img-responsive" src="img/sonixcycle1.png" alt="">
+					<h2 class="section-heading">Electrical and Software architecture</h2>
+
+					<ul>
+						<li><i>Sensors and Actuators</i>: 4 <a href="http://support.robotis.com/en/product/actuator/dynamixel/rx_series/rx-24f.htm">Dynamixel RX-24F servomotors</a>, an <a href="http://support.robotis.com/en/product/actuator/dynamixel/rx_series/rx-24f.htm">IMU (Inertial Measurement Unit)</a>, various force and flexion sensors in the feet and legs</li>
+						<li><i>Power supply</i>: A DC step-up voltage convertor connected to a 3 cells LiPo battery to supply the boards and motors with a regulated voltage and a stalk current that can rise to 10A when the legs are pushing together and the motors have to deliver a high torque</li>
+						<li><i>Control Board</i>: A <a href="http://support.robotis.com/en/product/controller/opencm9.04.htm">OpenCM board</a> (based on an Atmel ARM Cortex-M3 microprocessor) that reads the analog sensor values at a constant frequency and send the position or velocity commands to the servomotors using the protocol standard defined by Dynamixel</li>
+						<li><i>Computation board</i>: A <a href="https://www.raspberrypi.org/products/raspberry-pi-3-model-b/">Raspberry Pi</a> with Ubuntu Mate 16.04 that implements a CPG controller included  in the same Python software stack that the one used in the NRP and thus easily switch from simulation to trials and validation in the  real world</li>
+					</ul>
+
+					<a href="img/tigrillo_electrical_schema.png">
+						<img class="img-responsive" src="img/tigrillo_electrical_schema.png" alt="">
 					</a>
-					<span class="caption text-muted">An overall view of the Sonixcycle data flow for audio indexation.</span>
-					
+					<span class="caption text-muted">A top view of the Tigrillo robot with details about the electronics architecture.</span>
+
+					<p>The <a href="https://github.com/Gabs48/tigrillo2">software repository</a> also includes board documentation on the top of the python code used for control and simulation.</p>
+
 					</br>
-					
-					<p>In a browser, a sound designer could start with a semantic query which would hand back a subset of the most relevant results. Different widget in a graphical interface were used to classify this small subset on perceptual properties using algorithms like tSNE. Also, the user was now capable to select one or many timbral properties he wanted to retrieve and start a query in Solr on those indexed features. A custom cosine distance similarity measure in Solr was implemented to output a subset of the most similar sounds in regard to the selected perceptual properties in only a few milliseconds for a dataset of hundreds of gigabytes. A <a href="http://dl.acm.org/citation.cfm?id=2986436">paper</a> has been published with <a href="http://frisson.re/">Christian Frisson</a>, <a href="https://www.linkedin.com/in/alexismoinet">Alexis Moinet</a>, <a href="https://scholar.google.com/citations?user=xxpvjOUAAAAJ">Thierry Dutoit</a> and myself during the AudioMostly conference in 2016.</p>
-					
-					</br>
-					
-					<a href="img/sonixcycle2.png">
-						<img class="img-responsive" src="img/sonixcycle2.png" alt="">
-					</a>
-					<span class="caption text-muted">The Sonixcycle GUI allows the user to do semantic search (above) and visualize the results in a semantic list or classified by audio properties on a 2D grid. From the results list and map, he can also perform a perceptual research to target specific audio properties</span>
-					
-					
+
 				</div>
 			</div>
 		</div>
@@ -125,7 +136,7 @@
 
 	<hr>
 
-	<!-- Footer -->
+   <!-- Footer -->
 	<footer>
 		<div class="container">
 			<div class="row">
@@ -172,7 +183,7 @@
 							</a>
 						</li>
 					</ul>
-					<p class="copyright text-muted">Copyright &copy; Gabriel Urbain 2017</p>
+					<p class="copyright text-muted">Copyright &copy; Gabriel Urbain 2018</p>
 				</div>
 			</div>
 		</div>
@@ -204,5 +215,4 @@
 </body>
 
 </html> 
- 
  
