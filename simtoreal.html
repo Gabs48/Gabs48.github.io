@@ -6,7 +6,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Welcome">
+	<meta name="description" content="Tigrillo, a bio-inspired quadruped">
 	<meta name="author" content="Gabriel Urbain">
 
 	<title>Gabriel's Blog</title>
@@ -65,41 +65,53 @@
 		<!-- /.container -->
     </nav>
 
-    <!-- Page Header -->
-    <!-- Set your background image for this header on the line below. -->
-    <header class="intro-header" style="background-image: url('img/home-bg-3.png')">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <div class="site-heading">
-                        <h1>Gabriel Urbain</h1>
-                        <hr class="small">
-                        <span class="subheading">or <i>How I learned to stop worrying and start a research blog</i></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+	<!-- Page Header -->
+	<!-- Set your background image for this header on the line below. -->
+	<header class="intro-header" style="background-image: url('img/sim-to-real-bg.png')">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-9 col-lg-offset-2 col-md-10 col-md-offset-1">
+					<div class="site-heading">
+						<h1>From Simulation to Reality</h1>
+						<hr class="small">
+						<span class="subheading">Bridging the Learning Gap on a Compliant Quadruped Robot using Domain Randomnization.</i></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
 
-    <!-- Main Content -->
-    
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-				</br>
-				<h2 class="text-center">Hello and welcome on my personal website!</h2>
-				<h2 class="text-center">Feel free to contact me via any of the social media listed below.</h2>
-            </div>
-            <div class="col-md-12 center" id="img_phd"></div>
-        </div>
-        
-        </br> </br></br>
-    </div>
+	<!-- Post Content -->
+	<article>
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+					<p>Research on adaptive locomotion has been conducted for many years, especially through neurophysiological and biomechanical studies generally carried independently. However, those complex motor behaviours originate from interactions between the neural system, the musculoskeletal system and the environment which makes exhaustive research in vivo hard to realize in practice. Embodied experiments on real robots constitutes an promising solution to test the models in closed-loop but the latter generally require a long learning phase that can hardly be conducted on the real robot. A large community of researcher try to pre-train the models in simulation but faces <a href="https://www.ncbi.nlm.nih.gov/pubmed?Db=pubmed&Cmd=ShowDetailView&TermToSearch=10984047">the reality gap when transferring results on real platforms</a>.</p> 
+
+					<p>In <a href="https://www.frontiersin.org/articles/10.3389/fnbot.2019.00009/full">his last paper</a>, Alexander Vandesompele investigates the role of body parameters randomnization as a promising method of regularization during the transfer of a locomotion controller from simulation to reality. He used the <a href="tigrillodev.html">Tigrillo platform</a>, a compliant quadruped robot whose improvements in electronics and software had been presented in a previous post. I had the opportunity to help with the design of some experiments on what seems a good direction for improvements on robot learning.</p> 
 
 
+					<h2 class="section-heading">Going Further</h2>
 
+					<p>To better understand the challenges behind sim-to-real gap, I recommend the following keynote lecture of Pieter Abbeel, specialist in advanced Reinforcement Learning for Robotics.</p>
 
-	<!-- Footer -->
+					<div style="position:relative;height:0;padding-bottom:56.25%">
+						<iframe src="https://www.youtube.com/watch?v=MBQTu8P1N4M" style="position:absolute;width:100%;height:100%;left:0" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+						<iframe width="640" height="360" style="position:absolute;width:100%;height:100%;left:0" src="https://www.youtube.com/embed/MBQTu8P1N4M" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"allowfullscreen></iframe>
+					</div>
+
+					<span class="caption text-muted">The  <a href="https://bair.berkeley.edu/">BAIR Lab</a>, led by Pieter Abbeel has become a reference on bridging the sim-to-real gap.</span>					
+					</br>
+
+				</div>
+			</div>
+		</div>
+	</article>
+
+	<hr>
+
+   <!-- Footer -->
 	<footer>
 		<div class="container">
 			<div class="row">
@@ -152,7 +164,6 @@
 		</div>
 	</footer>
 
-	
 	<!-- jQuery -->
 	<script src="vendor/jquery/jquery.min.js"></script>
 
@@ -165,9 +176,6 @@
 
 	<!-- Theme JavaScript -->
 	<script src="js/clean-blog.min.js"></script>
-
-	<!-- Random image generator -->
-	<script src="js/random_img.js"></script>
 	
 	<!-- Google Analytics -->
 	<script>
@@ -179,8 +187,7 @@
 		ga('send', 'pageview');
 	</script>
 
-</script>
-
 </body>
 
-</html>
+</html> 
+ 
